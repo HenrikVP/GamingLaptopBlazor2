@@ -4,6 +4,7 @@ namespace MyBlazor.Data
 {
     public class GamingLaptopService
     {
+        //Connection string shouldnt be public accessable
         private string conString = "Data Source=192.168.2.2;Initial Catalog=MyDB;User ID=sa;Password=Passw0rd;";
 
         public GamingLaptop ReadGamingLaptop()

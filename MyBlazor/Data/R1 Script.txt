@@ -1,0 +1,36 @@
+
+hostname R1
+
+no logging console
+
+interface GigabitEthernet0/0
+ ip address 10.10.0.1 255.255.0.0
+ ip nat inside
+
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ ip nat inside
+
+!
+
+interface GigabitEthernet0/1/0
+ switchport access vlan 100
+ no ip address
+
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan100
+ ip address 10.233.149.xxx 255.255.255.0
+ ip nat outside
+
+ip nat inside source list 1 interface Vlan100 overload
+ip nat inside source static tcp 192.168.2.2 80 10.233.149.xxx 80 extendable
+ip nat inside source static tcp 192.168.2.2 1433 10.233.149.xxx 1433 extendable
+ip route 0.0.0.0 0.0.0.0 Vlan100
+ip route 192.168.2.0 255.255.255.0 GigabitEthernet0/0
+!
+access-list 1 permit 192.168.0.0 0.0.255.255
+!
+end
