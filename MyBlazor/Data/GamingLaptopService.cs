@@ -61,5 +61,17 @@ namespace MyBlazor.Data
                 con.Close();
             }
         }
+
+        public void DeleteGamingLaptop(int id)
+        {
+            using (SqlConnection con = new(conString))
+            {
+                string query = $"DELETE FROM GamingLaptop WHERE id = {id}";
+                SqlCommand cmd = new SqlCommand(query, con);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
     }
 }
