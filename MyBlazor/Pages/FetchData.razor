@@ -1,0 +1,66 @@
+﻿@page "/fetchdata"
+
+<PageTitle>Gaming Laptops</PageTitle>
+
+@using MyBlazor.Data
+
+<h1>Gaming Laptops</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (gaminglaptops == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>RAM</th>
+                <th>GPU</th>
+                <th>CPU</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gaminglaptop in gaminglaptops)
+            {
+                <tr>
+                    <td>@gaminglaptop.Id</td>
+                    <td>@gaminglaptop.Name</td>
+                    <td>@gaminglaptop.Brand</td>
+                    <td>@gaminglaptop.RAM</td>
+                    <td>@gaminglaptop.GPU</td>
+                    <td>@gaminglaptop.CPU</td>
+                    <td>@gaminglaptop.Price</td>
+                </tr>
+            }
+            <tr>
+                <td><button @onclick="AddNew">Add</button></td>
+                <td><input type="text" placeholder="Name..." @bind="gl.Name"></td>
+                <td><input type="text" placeholder="Brand..." @bind="gl.Brand"></td>
+                <td><input type="text" placeholder="RAM..." @bind="gl.RAM"></td>
+                <td><input type="text" placeholder="GPU..." @bind="gl.GPU"></td>
+                <td><input type="text" placeholder="CPU..." @bind="gl.CPU"></td>
+                <td><input type="text" placeholder="Price..." @bind="gl.Price"></td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    GamingLaptop? gl = new();
+    private List<GamingLaptop>? gaminglaptops = 
+        new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
+
+    private void AddNew(){
+        new GamingLaptopService().CreateGamingLaptop(gl);
+        gl = new();
+        gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
+
+    }
+}
