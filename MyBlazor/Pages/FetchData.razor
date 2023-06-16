@@ -29,15 +29,30 @@ else
         <tbody>
             @foreach (var gaminglaptop in gaminglaptops)
             {
-                <tr>
-                    <td><button class="button-77" role="button" @onclick="()=>Delete(gaminglaptop.Id)">X</button>  @gaminglaptop.Id</td>
-                    <td>@gaminglaptop.Name</td>
-                    <td>@gaminglaptop.Brand</td>
-                    <td>@gaminglaptop.RAM</td>
-                    <td>@gaminglaptop.GPU</td>
-                    <td>@gaminglaptop.CPU</td>
-                    <td>@gaminglaptop.Price</td>
-                </tr>
+                @if (updateId == gaminglaptop.Id)
+                {
+                    <tr>
+                        <td><button @onclick="()=>Update(gaminglaptop.Id)">Update</button></td>
+                        <td><input type="text" placeholder="Name..." @bind="gl.Name"></td>
+                        <td><input type="text" placeholder="Brand..." @bind="gl.Brand"></td>
+                        <td><input type="text" placeholder="RAM..." @bind="gl.RAM"></td>
+                        <td><input type="text" placeholder="GPU..." @bind="gl.GPU"></td>
+                        <td><input type="text" placeholder="CPU..." @bind="gl.CPU"></td>
+                        <td><input type="text" placeholder="Price..." @bind="gl.Price"></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td><button class="button-77" role="button" @onclick="()=>updateId = gaminglaptop.Id">Edit</button><button class="button-77" role="button" @onclick="()=>Delete(gaminglaptop.Id)">X</button>  @gaminglaptop.Id</td>
+                        <td>@gaminglaptop.Name</td>
+                        <td>@gaminglaptop.Brand</td>
+                        <td>@gaminglaptop.RAM</td>
+                        <td>@gaminglaptop.GPU</td>
+                        <td>@gaminglaptop.CPU</td>
+                        <td>@gaminglaptop.Price</td>
+                    </tr>
+                }
             }
             <tr>
                 <td><button @onclick="AddNew">Add</button></td>
@@ -53,19 +68,25 @@ else
 }
 
 @code {
+    int? updateId;
     GamingLaptop? gl = new();
-    private List<GamingLaptop>? gaminglaptops = 
+    private List<GamingLaptop>? gaminglaptops =
         new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
 
-    private void AddNew(){
+    private void AddNew()
+    {
         new GamingLaptopService().CreateGamingLaptop(gl);
         gl = new();
         gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
-
+    }
+    private void Delete(int id)
+    {
+        new GamingLaptopService().DeleteGamingLaptop(id);
+        gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
     }
 
-    private void Delete(int id) { 
-        new GamingLaptopService().DeleteGamingLaptop(id); 
+    private void Update(int id){
+        new GamingLaptopService().UpdateGamingLaptop(gl);
         gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
     }
 }

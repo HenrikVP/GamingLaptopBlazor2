@@ -66,8 +66,33 @@ namespace MyBlazor.Data
         {
             using (SqlConnection con = new(conString))
             {
-                string query = $"DELETE FROM GamingLaptop WHERE id = {id}";
+                string query = $"DELETE FROM GamingLaptop WHERE id = @Id";
                 SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.Add("@Id", System.Data.SqlDbType.Int).Value = id;
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public void UpdateGamingLaptop(GamingLaptop gl)
+        {
+            using (SqlConnection con = new(conString))
+            {
+                //ToDo Set SET values in query
+                string query = $"UPDATE GamingLaptop SET WHERE id = {gl.Id}";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.Add("@Id", System.Data.SqlDbType.Int).Value = gl.Id;
+                if (gl.Name == null) gl.Name = "Name Not Set";
+                cmd.Parameters.Add("@Name", System.Data.SqlDbType.NVarChar).Value = gl.Name;
+                if (gl.Brand == null) gl.Brand = "Brand Not Set";
+                cmd.Parameters.Add("@Brand", System.Data.SqlDbType.NVarChar).Value = gl.Brand;
+                cmd.Parameters.Add("@RAM", System.Data.SqlDbType.Int).Value = gl.RAM;
+                if (gl.GPU == null) gl.GPU = "GPU Not Set";
+                cmd.Parameters.Add("@GPU", System.Data.SqlDbType.NVarChar).Value = gl.GPU;
+                if (gl.CPU == null) gl.CPU = "CPU Not Set";
+                cmd.Parameters.Add("@CPU", System.Data.SqlDbType.NVarChar).Value = gl.CPU;
+                cmd.Parameters.Add("@Price", System.Data.SqlDbType.Float).Value = gl.Price;
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
