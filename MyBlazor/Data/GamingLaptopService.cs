@@ -80,7 +80,7 @@ namespace MyBlazor.Data
             using (SqlConnection con = new(conString))
             {
                 //ToDo Set SET values in query
-                string query = $"UPDATE GamingLaptop SET WHERE id = {gl.Id}";
+                string query = $"UPDATE GamingLaptop SET [Name] = @Name, Brand=@Brand, RAM=@RAM, GPU=@GPU, CPU=@CPU, Price=@Price WHERE id = {gl.Id}";
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.Add("@Id", System.Data.SqlDbType.Int).Value = gl.Id;
                 if (gl.Name == null) gl.Name = "Name Not Set";

@@ -32,13 +32,13 @@ else
                 @if (updateId == gaminglaptop.Id)
                 {
                     <tr>
-                        <td><button @onclick="()=>Update(gaminglaptop.Id)">Update</button></td>
-                        <td><input type="text" placeholder="Name..." @bind="gl.Name"></td>
-                        <td><input type="text" placeholder="Brand..." @bind="gl.Brand"></td>
-                        <td><input type="text" placeholder="RAM..." @bind="gl.RAM"></td>
-                        <td><input type="text" placeholder="GPU..." @bind="gl.GPU"></td>
-                        <td><input type="text" placeholder="CPU..." @bind="gl.CPU"></td>
-                        <td><input type="text" placeholder="Price..." @bind="gl.Price"></td>
+                        <td><button @onclick="()=>{gl = gaminglaptop;Update();}">Update</button></td>
+                        <td><input type="text" @bind="gaminglaptop.Name"></td>
+                        <td><input type="text" @bind="gaminglaptop.Brand"></td>
+                        <td><input type="text" @bind="gaminglaptop.RAM"></td>
+                        <td><input type="text" @bind="gaminglaptop.GPU"></td>
+                        <td><input type="text" @bind="gaminglaptop.CPU"></td>
+                        <td><input type="text" @bind="gaminglaptop.Price"></td>
                     </tr>
                 }
                 else
@@ -85,8 +85,10 @@ else
         gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
     }
 
-    private void Update(int id){
+    private void Update(){
         new GamingLaptopService().UpdateGamingLaptop(gl);
+        gl = new();
+        updateId = null;
         gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
     }
 }
