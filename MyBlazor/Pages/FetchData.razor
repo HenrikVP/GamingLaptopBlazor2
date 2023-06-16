@@ -77,18 +77,22 @@ else
     {
         new GamingLaptopService().CreateGamingLaptop(gl);
         gl = new();
-        gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
+        GetList();
     }
     private void Delete(int id)
     {
         new GamingLaptopService().DeleteGamingLaptop(id);
-        gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
+        GetList();
     }
 
     private void Update(){
         new GamingLaptopService().UpdateGamingLaptop(gl);
         gl = new();
         updateId = null;
+        GetList();
+    }
+    private void GetList(){
         gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
+
     }
 }
