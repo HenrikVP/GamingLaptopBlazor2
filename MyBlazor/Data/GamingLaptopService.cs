@@ -11,7 +11,7 @@ namespace MyBlazor.Data
         {
             //int id, string? name, string? brand, int rAM, string? gPU, string? cPU, float price)
 
-            return new GamingLaptop(1, "Nitro 5", "Acer", 16, "Nvidia 1060 TI", "Intel i5 8600", 6000);
+            return new GamingLaptop(1, "Nitro 5", "Acer", 16, "Nvidia 1060 TI", "Intel i5 8600", 6000, "");
         }
 
         public List<GamingLaptop> ReadGamingLaptops(string query)
@@ -33,6 +33,9 @@ namespace MyBlazor.Data
                     gamingLaptop.GPU = (string)reader[4];
                     gamingLaptop.CPU = (string)reader[5];
                     gamingLaptop.Price = (double)reader[6];
+                    if (reader[7].GetType() != typeof(DBNull))
+                        gamingLaptop.ImageUrl = (string)reader[7];
+                    else gamingLaptop.ImageUrl = null;
                     list.Add(gamingLaptop);
                 }
                 con.Close();
@@ -44,18 +47,20 @@ namespace MyBlazor.Data
         {
             using (SqlConnection con = new(conString))
             {
-                string query = $"INSERT INTO GamingLaptop ([Name], Brand, RAM, GPU, CPU, Price) VALUES (@Name, @Brand, @RAM, @GPU, @CPU, @Price)";
+                string query = $"INSERT INTO GamingLaptop ([Name], Brand, RAM, GPU, CPU, Price, ImageUrl) VALUES (@Name, @Brand, @RAM, @GPU, @CPU, @Price, @ImageUrl)";
                 SqlCommand cmd = new SqlCommand(query, con);
                 if (gl.Name == null) gl.Name = "Name Not Set";
                 cmd.Parameters.Add("@Name", System.Data.SqlDbType.NVarChar).Value = gl.Name;
                 if (gl.Brand == null) gl.Brand = "Brand Not Set";
                 cmd.Parameters.Add("@Brand", System.Data.SqlDbType.NVarChar).Value = gl.Brand;
                 cmd.Parameters.Add("@RAM", System.Data.SqlDbType.Int).Value = gl.RAM;
-                if (gl.GPU == null) gl.GPU = "GPU Not Set"; 
+                if (gl.GPU == null) gl.GPU = "GPU Not Set";
                 cmd.Parameters.Add("@GPU", System.Data.SqlDbType.NVarChar).Value = gl.GPU;
-                if (gl.CPU == null) gl.CPU = "CPU Not Set"; 
+                if (gl.CPU == null) gl.CPU = "CPU Not Set";
                 cmd.Parameters.Add("@CPU", System.Data.SqlDbType.NVarChar).Value = gl.CPU;
                 cmd.Parameters.Add("@Price", System.Data.SqlDbType.Float).Value = gl.Price;
+                //if (gl.ImageUrl == null) gl.ImageUrl = null;
+                cmd.Parameters.Add("@ImageUrl", System.Data.SqlDbType.NVarChar).Value = gl.ImageUrl;
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -80,7 +85,7 @@ namespace MyBlazor.Data
             using (SqlConnection con = new(conString))
             {
                 //ToDo Set SET values in query
-                string query = $"UPDATE GamingLaptop SET [Name] = @Name, Brand=@Brand, RAM=@RAM, GPU=@GPU, CPU=@CPU, Price=@Price WHERE id = {gl.Id}";
+                string query = $"UPDATE GamingLaptop SET [Name] = @Name, Brand=@Brand, RAM=@RAM, GPU=@GPU, CPU=@CPU, Price=@Price, ImageUrl=@ImageUrl WHERE id = {gl.Id}";
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.Add("@Id", System.Data.SqlDbType.Int).Value = gl.Id;
                 if (gl.Name == null) gl.Name = "Name Not Set";
@@ -93,6 +98,7 @@ namespace MyBlazor.Data
                 if (gl.CPU == null) gl.CPU = "CPU Not Set";
                 cmd.Parameters.Add("@CPU", System.Data.SqlDbType.NVarChar).Value = gl.CPU;
                 cmd.Parameters.Add("@Price", System.Data.SqlDbType.Float).Value = gl.Price;
+                cmd.Parameters.Add("@ImageUrl", System.Data.SqlDbType.NVarChar).Value = gl.ImageUrl;
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();

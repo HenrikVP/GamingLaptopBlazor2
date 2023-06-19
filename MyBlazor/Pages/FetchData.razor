@@ -32,6 +32,7 @@ else
                 <th>GPU</th>
                 <th>CPU</th>
                 <th>Price</th>
+                <th>Image</th>
             </tr>
         </thead>
         <tbody>
@@ -41,12 +42,15 @@ else
                 {
                     <tr>
                         <td><button @onclick="()=>{gl = item;Update();}">Update</button></td>
+
                         <td><input type="text" @bind="item.Name"></td>
                         <td><input type="text" @bind="item.Brand"></td>
                         <td><input type="text" @bind="item.RAM"></td>
                         <td><input type="text" @bind="item.GPU"></td>
                         <td><input type="text" @bind="item.CPU"></td>
                         <td><input type="text" @bind="item.Price"></td>
+                        <td><input type="text" @bind="item.ImageUrl"></td>
+
                     </tr>
                 }
                 else
@@ -59,6 +63,7 @@ else
                         <td>@item.GPU</td>
                         <td>@item.CPU</td>
                         <td>@item.Price</td>
+                        <td><img src=@item.ImageUrl style="max-height:64px"/></td>
                         <td style="min-width:200px"><img src="editing.png" style="max-height:32px" @onclick="()=>updateId = item.Id"/>
                             <button class="button-77" role="button" @onclick="()=>Delete(item.Id)">Slet</button>
                         </td>
@@ -73,6 +78,7 @@ else
                 <td><input type="text" placeholder="GPU..." @bind="gl.GPU"></td>
                 <td><input type="text" placeholder="CPU..." @bind="gl.CPU"></td>
                 <td><input type="text" placeholder="Price..." @bind="gl.Price"></td>
+                <td><input type="text" placeholder="ImageUrl" @bind="gl.ImageUrl"></td>
             </tr>
         </tbody>
     </table>
