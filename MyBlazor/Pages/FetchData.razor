@@ -8,6 +8,14 @@
 
 <p>This component demonstrates fetching data from a service.</p>
 
+<select @onchange="OrderBy">
+
+    @foreach (var item in orderList)
+    {
+        <option value=@item>@item</option>
+    }
+</select>
+
 @if (gaminglaptops == null)
 {
     <p><em>Loading...</em></p>
@@ -27,30 +35,33 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var gaminglaptop in gaminglaptops)
+            @foreach (GamingLaptop item in gaminglaptops)
             {
-                @if (updateId == gaminglaptop.Id)
+                @if (updateId == item.Id)
                 {
                     <tr>
-                        <td><button @onclick="()=>{gl = gaminglaptop;Update();}">Update</button></td>
-                        <td><input type="text" @bind="gaminglaptop.Name"></td>
-                        <td><input type="text" @bind="gaminglaptop.Brand"></td>
-                        <td><input type="text" @bind="gaminglaptop.RAM"></td>
-                        <td><input type="text" @bind="gaminglaptop.GPU"></td>
-                        <td><input type="text" @bind="gaminglaptop.CPU"></td>
-                        <td><input type="text" @bind="gaminglaptop.Price"></td>
+                        <td><button @onclick="()=>{gl = item;Update();}">Update</button></td>
+                        <td><input type="text" @bind="item.Name"></td>
+                        <td><input type="text" @bind="item.Brand"></td>
+                        <td><input type="text" @bind="item.RAM"></td>
+                        <td><input type="text" @bind="item.GPU"></td>
+                        <td><input type="text" @bind="item.CPU"></td>
+                        <td><input type="text" @bind="item.Price"></td>
                     </tr>
                 }
                 else
                 {
                     <tr>
-                        <td><button class="button-77" role="button" @onclick="()=>updateId = gaminglaptop.Id">Edit</button><button class="button-77" role="button" @onclick="()=>Delete(gaminglaptop.Id)">X</button>  @gaminglaptop.Id</td>
-                        <td>@gaminglaptop.Name</td>
-                        <td>@gaminglaptop.Brand</td>
-                        <td>@gaminglaptop.RAM</td>
-                        <td>@gaminglaptop.GPU</td>
-                        <td>@gaminglaptop.CPU</td>
-                        <td>@gaminglaptop.Price</td>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.Brand</td>
+                        <td>@item.RAM</td>
+                        <td>@item.GPU</td>
+                        <td>@item.CPU</td>
+                        <td>@item.Price</td>
+                        <td style="min-width:200px"><img src="editing.png" style="max-height:32px" @onclick="()=>updateId = item.Id"/>
+                            <button class="button-77" role="button" @onclick="()=>Delete(item.Id)">Slet</button>
+                        </td>
                     </tr>
                 }
             }
@@ -68,6 +79,10 @@ else
 }
 
 @code {
+    List<string> orderList = new() { "Id", "Name", "Price", "Ram", "GPU", "CPU" };
+
+    string ordered = "Name";
+
     int? updateId;
     GamingLaptop? gl = new();
     private List<GamingLaptop>? gaminglaptops =
@@ -85,14 +100,22 @@ else
         GetList();
     }
 
-    private void Update(){
+    private void Update()
+    {
         new GamingLaptopService().UpdateGamingLaptop(gl);
         gl = new();
         updateId = null;
         GetList();
     }
-    private void GetList(){
-        gaminglaptops = new GamingLaptopService().ReadGamingLaptops("SELECT * FROM GamingLaptop");
+    private void GetList()
+    {
+        gaminglaptops = new GamingLaptopService().ReadGamingLaptops($"SELECT * FROM GamingLaptop ORDER BY {ordered}");
 
+    }
+
+    private void OrderBy(ChangeEventArgs e)
+    {
+        if (e != null) ordered = e.Value.ToString();
+        GetList();
     }
 }
